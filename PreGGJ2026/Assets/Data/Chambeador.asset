@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23c099bcce9e10b488cddbf0e4ae41be, type: 3}
+  m_Name: Chambeador
+  m_EditorClassIdentifier: Assembly-CSharp::WorkerData
+  workerName: Miguel
+  workerID: 12
+  workerCount: 67
+  workerCount2: 69
+  workerCount3: 69
