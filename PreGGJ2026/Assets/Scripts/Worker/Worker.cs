@@ -13,7 +13,18 @@ public class Worker : MonoBehaviour
     {
         SetupStats();
     }
-
+    
+    public WorkerStat GetWorkerStat(StatType statType)
+    {
+        foreach (WorkerStat stat in workerStats)
+        {
+            if (stat.stat == statType)
+            {
+                return stat;
+            }
+        }
+        return null;
+    }
 
     void SetupStats()
     {
@@ -28,6 +39,11 @@ public class Worker : MonoBehaviour
             workerStats[i].SetCurrentValue(workerStats[i].maxValue);
         }
     }
+
+
+    #region MONITOR WORKER STATS
+    //Monitorear el estres, y la resistencia.
+    #endregion
 }
 
 public enum WorkerState

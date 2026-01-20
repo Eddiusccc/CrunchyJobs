@@ -8,14 +8,20 @@ public class WorkerStat
     int currentValue;
     public StatType stat;
     public int maxValue;
-
+    public static int maxStatValue = 20;
+    public static int minStatValue = 1;
     public int CurrentValue()
     {
         return currentValue;
     }
+
+    public void SetMaxValue(int value)
+    {
+        maxValue = Mathf.Clamp(value, minStatValue, maxStatValue);
+    }
     public void SetCurrentValue(int value)
     {
-        currentValue = Mathf.Clamp(value, 0, maxValue);
+        currentValue = Mathf.Clamp(value, minStatValue, maxValue);
     }
     public float GetStatPercentage()
     {

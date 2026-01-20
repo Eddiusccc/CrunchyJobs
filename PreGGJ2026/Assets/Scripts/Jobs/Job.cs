@@ -7,14 +7,92 @@ public class Job : MonoBehaviour
     public string jobName;
     public JobClass jobClass;
     public JobType jobType;
+    public int jobPointsReward = 1;
+    public static int JPR_min = 5;
+    public static int JPR_max = 20;
+    [HideInInspector] public JobState jobState = JobState.Disponible;
     [Header("WORKER ON JOB VALUES")]
     [Space(10)]
     public Worker currentWorker;
+    float jobTickTotal = 0f;
+    float jobTickCurrent = 0f;
+
+    #region WORKER MANAGEMENT
+    public void ResetJob()
+    {
+        jobTickCurrent = 0f;
+        jobTickTotal = JobManager.jobTickTimer_default;
+    }
+    public void AssignWorker(Worker worker)
+    {
+        currentWorker = worker;
+        worker.currentState = WorkerState.Trabajando;
+        jobState = JobState.Ocupado;
+        SetJobTickTimer(worker);
+    }
+    public void RemoveWorker()
+    {
+        currentWorker.currentState = WorkerState.Descansando;
+        currentWorker = null;
+        jobState = JobState.Disponible;
+        ResetJob();
+    }
+
+    #endregion
+
+    #region TICK MANAGEMENT
+
+    public void JobTickUpdate()
+    {
+        if (jobTickCurrent < jobTickTotal)
+        {
+            jobTickCurrent += Time.deltaTime;
+            return;
+        }
+        jobTickCurrent = 0f;
+
+        //JOB COMPLETE
+
+        OnTickCompleted();
+        //EFECTOS EN EL WORKER VAN AQUI
+    }
+
+    void OnTickCompleted()
+    {
+        float pointsCalc = 0f;
+        switch (jobClass)
+        {
+            case JobClass.Operaciones:
+                pointsCalc = (float)currentWorker.GetWorkerStat(StatType.Operaciones).CurrentValue();
+                break;
+            case JobClass.Comercio:
+                pointsCalc = (float)currentWorker.GetWorkerStat(StatType.Comercio).CurrentValue();
+                break;
+            case JobClass.Finanzas:
+                pointsCalc = (float)currentWorker.GetWorkerStat(StatType.Finanzas).CurrentValue();
+                break;
+        }
+
+        pointsCalc = pointsCalc.Remap(1, 20, 1.1f, 3.5f);
+        int pointsToAdd = Mathf.RoundToInt(pointsCalc * jobPointsReward);
+
+        ObjectiveManager.instance.AddJobPoints(pointsToAdd);
+    }
+
+    void SetJobTickTimer(Worker worker)
+    {
+        float modif = (float)worker.GetWorkerStat(StatType.Velocidad).CurrentValue();
+        jobTickTotal = JobManager.jobTickTimer_default * modif.Remap(1, 20, 0.95f, 0.66f);
+    }
 
 
+    #endregion
 
 
-
+    private void Start()
+    {
+        SetJobPointsReward(jobPointsReward);
+    }
     private void OnValidate()
     {
         SetJobClass(jobType);
@@ -51,6 +129,10 @@ public class Job : MonoBehaviour
                 return JobClass.Operaciones;
         }
     }
+    public void SetJobPointsReward(int jpr)
+    {
+        jobPointsReward = Mathf.Clamp(jpr, JPR_min, JPR_max);
+    }
 }
 
 public enum JobClass
@@ -75,4 +157,9 @@ public enum JobType
     Auditoria,
     Inversiones,
     Analisis
+}
+public enum JobState
+{
+    Disponible,
+    Ocupado
 }
