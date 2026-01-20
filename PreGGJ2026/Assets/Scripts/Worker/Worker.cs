@@ -3,41 +3,53 @@ using UnityEngine;
 
 public class Worker : MonoBehaviour
 {
-    public WorkerStats[] stats;
-
+    [Header("WORKER DATA")]
+    [Space(10)]
+    public string workerName;
+    // Hacer el sistema de portada del trabajador, juntando los sprites assets.
+    public WorkerStat[] workerStats;
+    public WorkerState currentState = WorkerState.Descansando;
     private void OnValidate()
     {
-        SetStatsArray();
+        SetupStats();
     }
-    void SetStatsArray()
+    
+    public WorkerStat GetWorkerStat(StatType statType)
     {
-        int enumCount = Enum.GetValues(typeof(EnumWorkerStat)).Length;
-        stats = new WorkerStats[enumCount];
-
-        for (int i = 0; i < enumCount; i++)
+        foreach (WorkerStat stat in workerStats)
         {
-            if (stats[i] == null)
-                stats[i] = new WorkerStats();
-
-            stats[i].stat = (EnumWorkerStat)i;
-        }
-    }
-
-    public WorkerStats FindStat(EnumWorkerStat statToFind)
-    {
-        for (int i = 0; i < stats.Length; i++)
-        {
+            if (stat.stat == statType)
             {
-            if (stats[i].stat == statToFind)
-                return stats[i];
+                return stat;
             }
         }
-        Debug.LogWarning("Stat not found: " + statToFind);
         return null;
     }
 
-    private void Start()
+    void SetupStats()
     {
-        FindStat(EnumWorkerStat.Cansancio).maxValue = 10;
+        int enumLength = Enum.GetValues(typeof(StatType)).Length;
+        workerStats = new WorkerStat[enumLength];
+        for (int i = 0; i < enumLength; i++)
+        {
+            workerStats[i] = new WorkerStat();
+            workerStats[i].stat = (StatType)i;
+            workerStats[i].statName = workerStats[i].stat.ToString();
+            workerStats[i].maxValue = 000;
+            workerStats[i].SetCurrentValue(workerStats[i].maxValue);
+        }
     }
+
+
+    #region MONITOR WORKER STATS
+    //Monitorear el estres, y la resistencia.
+    #endregion
+}
+
+public enum WorkerState
+{
+    Descansando,
+    Trabajando,
+    NoDisponible,
+    None
 }
