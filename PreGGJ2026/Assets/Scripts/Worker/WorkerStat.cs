@@ -5,9 +5,10 @@ using UnityEngine;
 public class WorkerStat
 {
     [HideInInspector] public string statName;
-    int currentValue;
     public StatType stat;
     public int maxValue;
+    public int currentValue;
+
     public static int maxStatValue = 20;
     public static int minStatValue = 1;
     public int CurrentValue()
@@ -19,6 +20,11 @@ public class WorkerStat
     {
         maxValue = Mathf.Clamp(value, minStatValue, maxStatValue);
     }
+    public void IncreaseCurrentValue(int amount)
+    {
+        SetCurrentValue(currentValue + amount);
+    }
+
     public void SetCurrentValue(int value)
     {
         currentValue = Mathf.Clamp(value, minStatValue, maxValue);
@@ -33,7 +39,7 @@ public class WorkerStat
 
 public enum StatType
 {
-    Resistencia,
+    Energia,
     Estres,
     Velocidad,
     Comercio,

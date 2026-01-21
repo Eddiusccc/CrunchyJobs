@@ -1339,24 +1339,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Worker
   workerName: 
   workerStats:
-  - statName: Resistencia
+  - statName: Energia
     stat: 0
-    maxValue: 0
+    maxValue: 12
+    currentValue: 12
   - statName: Estres
     stat: 1
-    maxValue: 0
+    maxValue: 16
+    currentValue: 1
   - statName: Velocidad
     stat: 2
-    maxValue: 0
+    maxValue: 14
+    currentValue: 14
   - statName: Comercio
     stat: 3
-    maxValue: 0
+    maxValue: 17
+    currentValue: 17
   - statName: Operaciones
     stat: 4
-    maxValue: 0
+    maxValue: 5
+    currentValue: 5
   - statName: Finanzas
     stat: 5
-    maxValue: 0
+    maxValue: 17
+    currentValue: 17
   currentState: 0
 --- !u!4 &1769795382
 Transform:
@@ -1527,6 +1533,7 @@ GameObject:
   - component: {fileID: 2125611539}
   - component: {fileID: 2125611538}
   - component: {fileID: 2125611537}
+  - component: {fileID: 2125611540}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1550,6 +1557,7 @@ MonoBehaviour:
   jobPointsTotal: 0
   jobPointsCurrent: 0
   level: 1
+  test: 0
 --- !u!114 &2125611538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1562,7 +1570,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4c8204dd83e90468ab84b7ad90c021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JobManager
-  jobs: []
+  allJobs: []
+  jobTickTimer_total: 3
 --- !u!4 &2125611539
 Transform:
   m_ObjectHideFlags: 0
@@ -1578,6 +1587,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2125611540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125611536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16944820b89e68649954bb3856df046a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorkerManager
+  allWorkers: []
 --- !u!1001 &261443200046364418
 PrefabInstance:
   m_ObjectHideFlags: 0

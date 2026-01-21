@@ -26,13 +26,24 @@ public class Job : MonoBehaviour
     public void AssignWorker(Worker worker)
     {
         currentWorker = worker;
+        currentWorker.currentJob = this;
         worker.currentState = WorkerState.Trabajando;
         jobState = JobState.Ocupado;
         SetJobTickTimer(worker);
     }
     public void RemoveWorker()
     {
+        currentWorker.currentJob = null;
         currentWorker.currentState = WorkerState.Descansando;
+        currentWorker = null;
+        jobState = JobState.Disponible;
+        ResetJob();
+    }
+
+    public void ForceRemoveWorker()
+    {
+        currentWorker.currentJob = null;
+        currentWorker.currentState = WorkerState.NoDisponible;
         currentWorker = null;
         jobState = JobState.Disponible;
         ResetJob();
@@ -50,11 +61,23 @@ public class Job : MonoBehaviour
             return;
         }
         jobTickCurrent = 0f;
-
-        //JOB COMPLETE
-
+        if (currentWorker == null)
+        {
+            Debug.LogWarning("Job Tick Update called but no worker assigned to job: " + jobName);
+            jobTickCurrent = 0f;
+            jobState = JobState.Disponible;
+            return;
+        }
+        if(currentWorker.currentState != WorkerState.Trabajando)
+        {
+            Debug.LogWarning("Job Tick Update called but worker is not in working state: " + currentWorker.workerName);
+            jobTickCurrent = 0f;
+            jobState = JobState.Disponible;
+            RemoveWorker();
+            return;
+        }
         OnTickCompleted();
-        //EFECTOS EN EL WORKER VAN AQUI
+        currentWorker.WorkApply();
     }
 
     void OnTickCompleted()
@@ -81,8 +104,10 @@ public class Job : MonoBehaviour
 
     void SetJobTickTimer(Worker worker)
     {
+        jobTickCurrent = 0f;
         float modif = (float)worker.GetWorkerStat(StatType.Velocidad).CurrentValue();
-        jobTickTotal = JobManager.jobTickTimer_default * modif.Remap(1, 20, 0.95f, 0.66f);
+        jobTickTotal = JobManager.jobTickTimer_default * modif.Remap(1, 20, 1f, 0.66f);
+        Debug.Log("Job Tick Timer set to: " + jobTickTotal + " seconds.");
     }
 
 
