@@ -4,27 +4,36 @@ public class JobManager : MonoBehaviour
 {
     public static JobManager instance;
 
-    public Job[] jobs;
+    public Job[] allJobs;
+    public float jobTickTimer_total = 5f;
     public static float jobTickTimer_default;
 
     private void Awake()
     {
         instance = this;
+        jobTickTimer_default = jobTickTimer_total;
     }
 
     private void Start()
     {
-        jobs = GameObject.FindObjectsByType<Job>(FindObjectsSortMode.None);
+        allJobs = GameObject.FindObjectsByType<Job>(FindObjectsSortMode.None);
     }
-    private void Update()
-    {
-        JobsTick();
 
+    public Job GetFreeJob()
+    {
+        foreach (Job job in allJobs)
+        {
+            if (job.jobState == JobState.Disponible)
+            {
+                return job;
+            }
+        }
+        return null;
     }
 
     public void JobsTick()
     {
-        foreach (Job job in jobs)
+        foreach (Job job in allJobs)
         {
             if (job.jobState == JobState.Ocupado)
             {
