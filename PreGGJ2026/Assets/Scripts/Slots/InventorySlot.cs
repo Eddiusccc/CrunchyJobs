@@ -42,6 +42,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             if(job.jobState == JobState.Disponible)
             {
                 job.AssignWorker(worker);
+                UIManager.instance.AssignWorker(worker);
                 Debug.Log("Worker assigned to job: " + job.jobName);
             }
         }

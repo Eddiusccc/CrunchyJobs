@@ -42,7 +42,7 @@ public class ObjectiveManager : MonoBehaviour
     void SetObjective()
     {
         float modif = 1 + (0.1f * (level - 1));
-        jobPointsTotal = Mathf.RoundToInt(100 * level * modif);
+        jobPointsTotal = Mathf.RoundToInt(150 * level * modif);
     }
 
     public void AddJobPoints(int points)
@@ -51,12 +51,19 @@ public class ObjectiveManager : MonoBehaviour
         if (jobPointsCurrent >= jobPointsTotal)
         {
             jobPointsCurrent = jobPointsTotal;
-            objectivesCompleted++;
-            level++;
+            UpdateBar();
+            //objectivesCompleted++;
+            //level++;
             Debug.Log("Objective Completed!");
             return;
         }
+        UpdateBar();
         Debug.Log("Job Points: " + jobPointsCurrent + " / " + jobPointsTotal);
+    }
+
+    void UpdateBar()
+    {
+        UIManager.instance.UpdateBar((float)jobPointsCurrent / jobPointsTotal);
     }
     public void ApplyFreeWorker()
     {
